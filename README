@@ -1,0 +1,47 @@
+This repository contains code developed for the bioinformatics analyses underlying our manuscript provisionally entitled:
+The PSI+ prion and HSP104 modulate the cytochrome c oxidase deficiency caused by deletion of COX12
+by Pawan Kumar Saini, Hannah Dawitz, Andreas Aufschnaiter, Jinsu Thomas, Amélie Amblard, James Stewart, Nicolas Thierry-Mieg, Martin Ott and Fabien Pierrel.
+
+
+The scripts below are listed in execution order: each script takes
+as input the output of the previous one.
+
+
+
+###############
+align.pl
+Align the reads from each sample on reference genome(s), convert 
+output from SAM to BAM and sort the BAMs on-the-fly, then index them.
+
+
+###############
+callVariants.pl
+Call variants with GATK HaplotypeCaller, producing a GVCF for each sample.
+
+
+###############
+mergeGVCFs.pl
+Produce a single multi-sample GVCF per reference genome, usage example:
+mergeGVCFs.pl ../CallVariants/*VEP.g.vcf > merged_ensembl.g.vcf 2> merged_ensembl.log
+
+
+###############
+gvcf2vcf.pl
+Parse a merged GVCF, produce a VCF where non-informative lines and
+ALTs are removed and genotypes are called, example usage:
+gvcf2vcf.pl < ../MergeGVCFs/merged_ensembl.g.vcf  > mergedVCF_ensembl.vcf 2> mergedVCF_ensembl.log
+
+
+###############
+filterVCF.pl
+Find good candidates in the previous VCF, taking into account our 
+knowledge of the various strains sequenced.
+Examples:
+# Good candidates for each strain (strict, ie don't allow NOCALLs)
+filterVCF.pl --strain 1 --zero 0,1,3,5,6,7 --one 2,4  < ../GVCF2VCF/mergedVCF_ensembl.vcf > goodCandidates_ensembl_strain1_strict.vcf
+filterVCF.pl --strain 2 --zero 0,1,2,4,5,7 --one 3,6  < ../GVCF2VCF/mergedVCF_ensembl.vcf > goodCandidates_ensembl_strain2_strict.vcf
+# Good candidates for strain 1 (allow NOCALLs, need at least one true 0/0 and 1/1)
+./filterVCF.pl --strain 1 --nocalls --zero 0,1,3,5,6,7 --one 2,4  < ../GVCF2VCF/mergedVCF_ensembl.vcf > goodCandidates_ensembl_strain1_allowNocalls.vcf
+
+
+###############
