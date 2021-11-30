@@ -1,8 +1,7 @@
 This repository contains code developed for the bioinformatics analyses underlying our manuscript provisionally entitled:
 The PSI+ prion and HSP104 modulate the cytochrome c oxidase deficiency caused by deletion of COX12
 by Pawan Kumar Saini, Hannah Dawitz, Andreas Aufschnaiter, Jinsu Thomas, Amélie Amblard, James Stewart, Nicolas Thierry-Mieg, Martin Ott and Fabien Pierrel.
-https://biorxiv.org/cgi/content/short/2021.10.08.463630v1
-
+https://www.biorxiv.org/content/10.1101/2021.10.08.463630v2
 
 The scripts below are listed in execution order: each script takes as input the output of the previous one.
 
